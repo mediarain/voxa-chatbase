@@ -1,0 +1,54 @@
+{
+  "name": "voxa-chatbase",
+  "version": "0.1.0",
+  "description": "Integrate Chatbase analytics into your voice apps using the voxa framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "istanbul cover _mocha -- --recursive tests",
+    "test-ci": "JUNIT_REPORT_PATH=junit.xml istanbul cover _mocha -- --recursive --colors --reporter mocha-jenkins-reporter tests",
+    "cobertura": "istanbul report cobertura --root coverage",
+    "lint": "eslint lib/ tests/",
+    "lint-fix": "eslint --fix lib/ tests/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mediarain/voxa-chatbase.git"
+  },
+  "keywords": [
+    "alexa",
+    "skills",
+    "apps",
+    "framework",
+    "echo",
+    "amazon",
+    "voxa",
+    "analytics",
+    "chatbase"
+  ],
+  "author": "Rain Agency <npm@rain.agency> (http://rain.agency)",
+  "engines": {
+    "node": ">=4.3"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@google/chatbase": "^1.1.2",
+    "lambda-log": "^1.4.0",
+    "lodash": "^4.17.10"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "3.15.0",
+    "eslint-config-airbnb-base": "11.1.0",
+    "eslint-plugin-import": "2.2.0",
+    "istanbul": "^0.4.5",
+    "mocha": "3.2.0",
+    "mocha-jenkins-reporter": "0.3.7",
+    "nock": "^9.2.3",
+    "simple-mock": "^0.7.3",
+    "voxa": "^2.2.1"
+  },
+  "bugs": {
+    "url": "https://github.com/mediarain/voxa-chatbase/issues"
+  },
+  "homepage": "https://github.com/mediarain/voxa-chatbase#readme"
+}
