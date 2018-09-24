@@ -1,15 +1,14 @@
 'use strict';
 
 const _ = require('lodash');
-const chai = require('chai');
 const simple = require('simple-mock');
 const nock = require('nock');
 const Voxa = require('voxa');
+const { expect } = require('chai');
 
 const voxaChatbase = require('../lib/Voxa-Chatbase');
 const views = require('./views');
 
-const expect = chai.expect;
 const CHATBASE_URL = 'https://chatbase-area120.appspot.com';
 const chatbaseConfig = {
   apiKey: 'some_api_key',

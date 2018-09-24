@@ -25,4 +25,3 @@ const views = (function views() {
 }());
 
 module.exports = views;
-

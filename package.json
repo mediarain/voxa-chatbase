@@ -32,20 +32,20 @@
   "license": "MIT",
   "dependencies": {
     "@google/chatbase": "^1.1.2",
-    "lambda-log": "^1.4.0",
-    "lodash": "^4.17.10"
+    "lambda-log": "^2.0.0",
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "eslint": "3.15.0",
-    "eslint-config-airbnb-base": "11.1.0",
-    "eslint-plugin-import": "2.2.0",
+    "chai": "^4.1.2",
+    "eslint": "^5.6.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
     "istanbul": "^0.4.5",
-    "mocha": "3.2.0",
-    "mocha-jenkins-reporter": "0.3.7",
-    "nock": "^9.2.3",
-    "simple-mock": "^0.7.3",
-    "voxa": "^2.2.1"
+    "mocha": "^5.2.0",
+    "mocha-jenkins-reporter": "^0.4.0",
+    "nock": "^10.0.0",
+    "simple-mock": "^0.8.0",
+    "voxa": "^2.5.0"
   },
   "bugs": {
     "url": "https://github.com/mediarain/voxa-chatbase/issues"

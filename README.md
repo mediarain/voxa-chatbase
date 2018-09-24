@@ -27,8 +27,8 @@ const skill = new Voxa(voxaOptions);
 
 const chatbaseConfig = {
   apiKey: '<chatbase apiKey>',
-  ignoreUsers: [], // a list of users to ignore
-  suppressSending: false, // A flag to supress sending hits. 
+  ignoreUsers: [], // a list of users to ignore.
+  suppressSending: false, // A flag to supress sending hits.
 };
 
 voxaChatbase(skill, chatbaseConfig);
