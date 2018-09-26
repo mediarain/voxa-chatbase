@@ -1,0 +1,14 @@
+version: "2"
+plugins:
+  git-legal:
+    enabled: true
+    checks:
+      Compatibility/No licenses:
+        enabled: false
+  markdownlint:
+    enabled: true
+    checks:
+      MD013:
+        enabled: false
+    config:
+      file: "README.md"
