@@ -1,6 +1,6 @@
 {
   "name": "voxa-chatbase",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Integrate Chatbase analytics into your voice apps using the voxa framework",
   "main": "index.js",
   "scripts": {
@@ -45,7 +45,7 @@
     "mocha-jenkins-reporter": "^0.4.0",
     "nock": "^10.0.0",
     "simple-mock": "^0.8.0",
-    "voxa": "^2.5.0"
+    "voxa": "3.0.0-alpha30"
   },
   "bugs": {
     "url": "https://github.com/mediarain/voxa-chatbase/issues"
