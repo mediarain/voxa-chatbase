@@ -1,4 +1,8 @@
-# Sphinx documentation
+# compiled typescript
+
+lib/
+
+## Sphinx documentation
 docs/_build/
 #### Vim
 # swap

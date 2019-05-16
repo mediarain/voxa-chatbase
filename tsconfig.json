@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "outDir": "./lib/",
+    "declaration": true,
+    "sourceMap": true,
+    "strictNullChecks": true,
+    "module": "commonjs",
+    "target": "ES6",
+    "noImplicitAny": true,
+    "allowJs": false,
+    "moduleResolution": "node",
+    "strict": true,
+    "lib": ["ES2015"]
+  },
+  "include": [
+    "./src/",
+    "./test/"
+    ]
+}
