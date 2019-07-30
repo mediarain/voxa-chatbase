@@ -26,6 +26,7 @@ const voxaChatbase = require('voxa-chatbase');
 const skill = new Voxa(voxaOptions);
 
 const chatbaseConfig = {
+  platform: '<"Facebook"|"SMS"|"Web"|"Android"|"iOS"|"Actions"|"Alexa"|"Cortana"|"Kik"|"Skype"|"Twitter"|"Viber"|"Telegram"|"Slack"|"WhatsApp"|"WeChat"|"Line"|"Kakao">' \\ or a custom name like "Workplace" or "OurPlatform"
   apiKey: '<chatbase apiKey>',
   ignoreUsers: [], // a list of users to ignore.
   suppressSending: false, // A flag to supress sending hits.
