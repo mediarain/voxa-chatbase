@@ -2,17 +2,18 @@
   "name": "voxa-chatbase",
   "version": "0.1.1",
   "description": "Integrate Chatbase analytics into your voice apps using the voxa framework",
-  "main": "index.js",
+  "main": "lib/Voxa-Chatbase.js",
   "scripts": {
-    "test": "istanbul cover _mocha -- --recursive tests",
-    "test-ci": "JUNIT_REPORT_PATH=junit.xml istanbul cover _mocha -- --recursive --colors --reporter mocha-jenkins-reporter tests",
-    "cobertura": "istanbul report cobertura --root coverage",
-    "lint": "eslint lib/ tests/",
-    "lint-fix": "eslint --fix lib/ tests/"
+    "test": "mocha tests/*.spec.* tests/**/*.spec.*",
+    "test-ci": "nyc mocha --colors --reporter mocha-jenkins-reporter tests tests/*.spec.* tests/**/*.spec.*",
+    "lint": "tslint --project tsconfig.json --config tslint.json",
+    "clean": "rimraf lib/",
+    "prepare": "npm run clean && tsc",
+    "report": "nyc report --reporter=json && nyc report --reporter html && nyc report --reporter=lcov && nyc report --reporter=cobertura"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mediarain/voxa-chatbase.git"
+    "url": "git+https://github.com/VoxaAI/voxa-chatbase.git"
   },
   "keywords": [
     "alexa",
@@ -32,23 +33,31 @@
   "license": "MIT",
   "dependencies": {
     "@google/chatbase": "^1.1.2",
-    "lambda-log": "^2.0.0",
+    "@types/lodash": "^4.14.129",
+    "lambda-log": "^2.2.0",
     "lodash": "^4.17.11"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
-    "eslint": "^5.6.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "istanbul": "^1.1.0-alpha.1",
-    "mocha": "^5.2.0",
-    "mocha-jenkins-reporter": "^0.4.0",
-    "nock": "^10.0.0",
+    "@types/nock": "^10.0.3",
+    "chai": "^4.2.0",
+    "mocha": "6.1.4",
+    "mocha-jenkins-reporter": "0.4.1",
+    "nock": "^10.0.6",
+    "nyc": "^14.1.1",
+    "rimraf": "^2.6.3",
     "simple-mock": "^0.8.0",
-    "voxa": "3.0.0-alpha30"
+    "source-map-support": "^0.5.12",
+    "ts-node": "^8.1.0",
+    "tslint": "^5.16.0",
+    "tslint-no-unused-expression-chai": "^0.1.4",
+    "typescript": "^3.4.5",
+    "voxa": "^3.1.0"
+  },
+  "peerDependencies": {
+    "voxa": "^3.1.0"
   },
   "bugs": {
-    "url": "https://github.com/mediarain/voxa-chatbase/issues"
+    "url": "https://github.com/VoxaAI/voxa-chatbase/issues"
   },
-  "homepage": "https://github.com/mediarain/voxa-chatbase#readme"
+  "homepage": "https://github.com/VoxaAI/voxa-chatbase#readme"
 }

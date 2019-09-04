@@ -1,26 +1,27 @@
 'use strict';
 
 const _ = require('lodash');
+const { expect } = require('chai');
 const simple = require('simple-mock');
 const nock = require('nock');
-const voxa = require('voxa');
-const { expect } = require('chai');
+const { VoxaApp, AlexaPlatform } = require('voxa');
 
-const voxaChatbase = require('../lib/Voxa-Chatbase');
+const voxaChatbase = require('../lib/Voxa-Chatbase').register;
 const views = require('./views');
 
 const CHATBASE_URL = 'https://chatbase-area120.appspot.com';
 const chatbaseConfig = {
   apiKey: 'some_api_key',
+  platform: 'alexa',
 };
 
-let app;
+let voxaApp;
 let alexaSkill;
 
 describe('Voxa-Chatbase plugin', () => {
   beforeEach(() => {
-    app = new voxa.VoxaApp({ views });
-    alexaSkill = new voxa.AlexaPlatform(app);
+    voxaApp = new VoxaApp({ views });
+    alexaSkill = new AlexaPlatform(voxaApp);
 
     const response = {
       all_succeeded: true,
@@ -39,7 +40,7 @@ describe('Voxa-Chatbase plugin', () => {
 
   it('should register ChatbaseAnalytics on LaunchRequest', async () => {
     const spy = simple.spy(() => ({ ask: 'LaunchIntent.OpenResponse', to: 'entry' }));
-    alexaSkill.onIntent('LaunchIntent', spy);
+    voxaApp.onIntent('LaunchIntent', spy);
 
     const event = {
       request: {
@@ -57,7 +58,9 @@ describe('Voxa-Chatbase plugin', () => {
       },
     };
 
-    voxaChatbase(app, chatbaseConfig);
+    delete chatbaseConfig.platform;
+
+    voxaChatbase(voxaApp, chatbaseConfig);
 
     const reply = await alexaSkill.execute(event);
 
@@ -69,7 +72,7 @@ describe('Voxa-Chatbase plugin', () => {
 
   it('should register ChatbaseAnalytics on IntentRequest', async () => {
     const spy = simple.spy(() => ({ ask: 'Question.Ask', to: 'entry' }));
-    alexaSkill.onIntent('SomeIntent', spy);
+    voxaApp.onIntent('SomeIntent', spy);
 
     const event = {
       request: {
@@ -95,7 +98,7 @@ describe('Voxa-Chatbase plugin', () => {
       },
     };
 
-    voxaChatbase(app, chatbaseConfig);
+    voxaChatbase(voxaApp, chatbaseConfig);
 
     const reply = await alexaSkill.execute(event);
 
@@ -107,7 +110,7 @@ describe('Voxa-Chatbase plugin', () => {
 
   it('should register ChatbaseAnalytics on AMAZON.FallbackIntent and end the session', async () => {
     const spy = simple.spy(() => ({ tell: 'ExitIntent.GeneralExit' }));
-    alexaSkill.onIntent('FallbackIntent', spy);
+    voxaApp.onIntent('FallbackIntent', spy);
 
     const event = {
       request: {
@@ -127,7 +130,7 @@ describe('Voxa-Chatbase plugin', () => {
       },
     };
 
-    voxaChatbase(app, chatbaseConfig);
+    voxaChatbase(voxaApp, chatbaseConfig);
 
     const reply = await alexaSkill.execute(event);
 
@@ -139,7 +142,7 @@ describe('Voxa-Chatbase plugin', () => {
 
   it('should register ChatbaseAnalytics on SessionEndedRequest', async () => {
     const spy = simple.spy(() => ({ tell: 'ExitIntent.GeneralExit' }));
-    app.onSessionEnded(spy);
+    voxaApp.onSessionEnded(spy);
 
     const event = {
       request: {
@@ -156,7 +159,7 @@ describe('Voxa-Chatbase plugin', () => {
       },
     };
 
-    voxaChatbase(app, chatbaseConfig);
+    voxaChatbase(voxaApp, chatbaseConfig);
 
     const reply = await alexaSkill.execute(event);
 
@@ -168,10 +171,10 @@ describe('Voxa-Chatbase plugin', () => {
     const intentSpy = simple.spy(() => {
       throw new Error('random error');
     });
-    alexaSkill.onIntent('ErrorIntent', intentSpy);
+    voxaApp.onIntent('ErrorIntent', intentSpy);
 
     const spy = simple.spy(() => ({ say: 'BadInput.RepeatLastAskReprompt.say', to: 'invalid-state' }));
-    app.onError(spy);
+    voxaApp.onError(spy);
 
     const event = {
       request: {
@@ -191,7 +194,7 @@ describe('Voxa-Chatbase plugin', () => {
       },
     };
 
-    voxaChatbase(app, chatbaseConfig);
+    voxaChatbase(voxaApp, chatbaseConfig);
 
     const reply = await alexaSkill.execute(event);
 
@@ -202,7 +205,7 @@ describe('Voxa-Chatbase plugin', () => {
 
   it('should not record analytics if the user is ignored', async () => {
     const spy = simple.spy(() => ({ tell: 'ExitIntent.GeneralExit' }));
-    app.onSessionEnded(spy);
+    voxaApp.onSessionEnded(spy);
 
     const event = {
       request: {
@@ -222,7 +225,7 @@ describe('Voxa-Chatbase plugin', () => {
     const ignoreUsersConfig = _.cloneDeep(chatbaseConfig);
     ignoreUsersConfig.ignoreUsers = ['user-id'];
 
-    voxaChatbase(app, ignoreUsersConfig);
+    voxaChatbase(voxaApp, ignoreUsersConfig);
 
     const reply = await alexaSkill.execute(event);
 
@@ -231,7 +234,7 @@ describe('Voxa-Chatbase plugin', () => {
 
   it('should not record analytics if suppressSending === true', async () => {
     const spy = simple.spy(() => ({ tell: 'ExitIntent.GeneralExit' }));
-    alexaSkill.onIntent('ErrorIntent', spy);
+    voxaApp.onIntent('ErrorIntent', spy);
 
     const event = {
       request: {
@@ -254,7 +257,7 @@ describe('Voxa-Chatbase plugin', () => {
     const suppressSendingConfig = _.cloneDeep(chatbaseConfig);
     suppressSendingConfig.suppressSending = true;
 
-    voxaChatbase(app, suppressSendingConfig);
+    voxaChatbase(voxaApp, suppressSendingConfig);
 
     const reply = await alexaSkill.execute(event);
 
@@ -264,8 +267,8 @@ describe('Voxa-Chatbase plugin', () => {
 
 describe('Voxa-Chatbase plugin error: all_succeeded flag is not present', () => {
   beforeEach(() => {
-    app = new voxa.VoxaApp({ views });
-    alexaSkill = new voxa.AlexaPlatform(app);
+    voxaApp = new VoxaApp({ views });
+    alexaSkill = new AlexaPlatform(voxaApp);
 
     const response = {
       status: 200,
@@ -283,7 +286,7 @@ describe('Voxa-Chatbase plugin error: all_succeeded flag is not present', () => 
 
   it('should not record analytics due to Chatbase Error', async () => {
     const spy = simple.spy(() => ({ tell: 'ExitIntent.GeneralExit' }));
-    app.onSessionEnded(spy);
+    voxaApp.onSessionEnded(spy);
 
     const event = {
       request: {
@@ -300,7 +303,7 @@ describe('Voxa-Chatbase plugin error: all_succeeded flag is not present', () => 
       },
     };
 
-    voxaChatbase(app, chatbaseConfig);
+    voxaChatbase(voxaApp, chatbaseConfig);
 
     const reply = await alexaSkill.execute(event);
 
