@@ -38,7 +38,7 @@ export interface IVoxaChatbaseConfig {
   suppressSending?: boolean;
 }
 
-export function register(skill: VoxaApp, config: IVoxaChatbaseConfig) {
+export default function register(skill: VoxaApp, config: IVoxaChatbaseConfig) {
   defaultConfig = _.merge({}, pluginConfig, config);
 
   skill.onBeforeReplySent(track);
