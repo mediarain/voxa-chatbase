@@ -1,6 +1,6 @@
 {
   "name": "voxa-chatbase",
-  "version": "0.1.1",
+  "version": "1.0.1",
   "description": "Integrate Chatbase analytics into your voice apps using the voxa framework",
   "main": "lib/Voxa-Chatbase.js",
   "scripts": {

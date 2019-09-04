@@ -89,13 +89,9 @@ async function track(
 function createUserMessage(messageSet: any, voxaEvent: VoxaEvent) {
   const unhandledIntents = ["FallbackIntent", "Unhandled", "DefaultFallbackIntent"];
   const intentName = _.get(voxaEvent, "intent.name") || voxaEvent.request.type;
-  const params: any = {};
+  const params = _.get(voxaEvent, "intent.params");
 
-  _.each(_.get(voxaEvent, "intent.params"), (x) => {
-    params[x.name] = x.value;
-  });
-
-  const userMessage = _.get(voxaEvent, "intent.params") ? JSON.stringify(params) : "";
+  const userMessage = params ? JSON.stringify(params) : "";
 
   const newMessage = createMessage(messageSet, voxaEvent);
 
