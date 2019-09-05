@@ -126,3 +126,5 @@ function createMessage(messageSet: any, voxaEvent: VoxaEvent) {
     .setTimestamp(timestamp)
     .setUserId(voxaEvent.user.userId);
 }
+
+export default register;
