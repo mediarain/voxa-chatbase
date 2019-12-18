@@ -7,8 +7,7 @@
     "test": "nyc --reporter=html --reporter=text --report-dir=reports mocha  test/",
     "lint": "tslint --config tslint.json --project tsconfig.json",
     "clean": "rimraf lib/",
-    "prepare": "npm run clean && tsc",
-    "cobertura": "nyc report cobertura --root coverage"
+    "prepare": "npm run clean && tsc"
   },
   "repository": {
     "type": "git",
