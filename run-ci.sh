@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ev
 
-npm run test-ci
+npm run test
 npm run report
 npm run lint
 
