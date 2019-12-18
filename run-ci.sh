@@ -1,11 +1,10 @@
 #!/bin/bash
 set -ev
 
-yarn test-ci
-yarn report
-yarn lint
+npm run test-ci
+npm run report
+npm run lint
 
 if [ "${CI}" = "true" ]; then
-  npm install coveralls
-  cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+	npx nyc report --reporter=text-lcov | npx coveralls
 fi

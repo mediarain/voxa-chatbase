@@ -4,12 +4,11 @@
   "description": "Integrate Chatbase analytics into your voice apps using the voxa framework",
   "main": "lib/Voxa-Chatbase.js",
   "scripts": {
-    "test": "mocha tests/*.spec.* tests/**/*.spec.*",
-    "test-ci": "nyc mocha --colors --reporter mocha-jenkins-reporter tests tests/*.spec.* tests/**/*.spec.*",
-    "lint": "tslint --project tsconfig.json --config tslint.json",
+    "test": "nyc --reporter=html --reporter=text --report-dir=reports mocha  test/",
+    "lint": "tslint --config tslint.json --project tsconfig.json",
     "clean": "rimraf lib/",
     "prepare": "npm run clean && tsc",
-    "report": "nyc report --reporter=json && nyc report --reporter html && nyc report --reporter=lcov && nyc report --reporter=cobertura"
+    "cobertura": "nyc report cobertura --root coverage"
   },
   "repository": {
     "type": "git",
@@ -34,30 +33,49 @@
   "dependencies": {
     "@google/chatbase": "^1.1.2",
     "@types/lodash": "^4.14.129",
-    "lambda-log": "^2.2.0",
     "lodash": "^4.17.11"
   },
   "devDependencies": {
-    "@types/nock": "^10.0.3",
+    "@types/chai": "^4.2.6",
+    "@types/mocha": "^5.2.7",
+    "@types/nock": "^11.1.0",
+    "@types/simple-mock": "^0.8.1",
+    "aws-sdk": "^2.592.0",
     "chai": "^4.2.0",
-    "mocha": "6.1.4",
-    "mocha-jenkins-reporter": "0.4.1",
-    "nock": "^10.0.6",
+    "husky": "^3.1.0",
+    "mocha": "^6.2.2",
+    "mocha-jenkins-reporter": "^0.4.2",
+    "nock": "^11.7.0",
     "nyc": "^14.1.1",
-    "rimraf": "^2.6.3",
+    "prettier": "^1.19.1",
+    "pretty-quick": "^2.0.1",
+    "rimraf": "^3.0.0",
     "simple-mock": "^0.8.0",
     "source-map-support": "^0.5.12",
     "ts-node": "^8.1.0",
     "tslint": "^5.16.0",
+    "tslint-config-prettier": "^1.18.0",
     "tslint-no-unused-expression-chai": "^0.1.4",
+    "tslint-plugin-prettier": "^2.0.1",
     "typescript": "^3.4.5",
-    "voxa": "^3.1.0"
-  },
-  "peerDependencies": {
-    "voxa": "^3.1.0"
+    "voxa": "^3.3.0"
   },
   "bugs": {
     "url": "https://github.com/VoxaAI/voxa-chatbase/issues"
   },
-  "homepage": "https://github.com/VoxaAI/voxa-chatbase#readme"
+  "homepage": "https://github.com/VoxaAI/voxa-chatbase#readme",
+  "peerDependencies": {
+    "voxa": "^3.3.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npx pretty-quick --staged && npm run lint && npm test && npx tsc"
+    }
+  },
+  "nyc": {
+    "extension": [
+      ".js",
+      ".ts"
+    ]
+  }
 }
