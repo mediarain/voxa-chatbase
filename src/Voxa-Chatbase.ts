@@ -20,22 +20,21 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import * as lambdaLog from "lambda-log";
-import * as _ from "lodash";
+import _ from "lodash";
 import { ITransition, IVoxaReply, VoxaApp, VoxaEvent } from "voxa";
-/* tslint:disable-next-line */
-const Chatbase = require("@google/chatbase");
+import Chatbase from "@google/chatbase";
 
 const pluginConfig = {
-  ignoreUsers: [],
+  ignoreUsers: []
 };
 
 let defaultConfig: any;
 
 export interface IVoxaChatbaseConfig {
-  apiKey: boolean;
+  apiKey: string;
   platform?: string;
   suppressSending?: boolean;
+  ignoreUsers?: (string | RegExp)[];
 }
 
 export function register(skill: VoxaApp, config: IVoxaChatbaseConfig) {
@@ -43,26 +42,37 @@ export function register(skill: VoxaApp, config: IVoxaChatbaseConfig) {
 
   skill.onBeforeReplySent(track);
 
-  skill.onSessionEnded(async (
-    voxaEvent: VoxaEvent,
-    reply: IVoxaReply,
-    transition: ITransition,
-  ) => {
-    await track(voxaEvent, reply, transition, true);
-  });
+  skill.onSessionEnded(
+    async (
+      voxaEvent: VoxaEvent,
+      reply: IVoxaReply,
+      transition: ITransition
+    ) => {
+      await track(voxaEvent, reply, transition, true);
+    }
+  );
 }
 
 async function track(
   voxaEvent: VoxaEvent,
   reply: IVoxaReply,
-  transition: ITransition,
-  isSessionEndedRequest?: boolean,
+  _transition: ITransition,
+  isSessionEndedRequest?: boolean
 ) {
-  if (_.includes(defaultConfig.ignoreUsers, voxaEvent.user.userId)) { return Promise.resolve(null); }
-  if (defaultConfig.suppressSending) { return Promise.resolve(null); }
-  if (isSessionEndedRequest && voxaEvent.request.type !== "SessionEndedRequest") { return Promise.resolve(null); }
-
-  lambdaLog.info("Sending to chatbase");
+  for (const ignoreRule of defaultConfig.ignoreUsers) {
+    if (voxaEvent.user.userId.match(ignoreRule)) {
+      return null;
+    }
+  }
+  if (defaultConfig.suppressSending) {
+    return Promise.resolve(null);
+  }
+  if (
+    isSessionEndedRequest &&
+    voxaEvent.request.type !== "SessionEndedRequest"
+  ) {
+    return Promise.resolve(null);
+  }
 
   const messageSet = Chatbase.newMessageSet()
     .setApiKey(defaultConfig.apiKey)
@@ -78,16 +88,20 @@ async function track(
   // SENDING ANALYTICS
   try {
     const response = await messageSet.sendMessageSet();
-    lambdaLog.info("Response from chatbase", { response });
+    voxaEvent.log.debug("Response from chatbase", { response });
 
     return response;
   } catch (err) {
-    lambdaLog.error(err);
+    voxaEvent.log.error(err);
   }
 }
 
 function createUserMessage(messageSet: any, voxaEvent: VoxaEvent) {
-  const unhandledIntents = ["FallbackIntent", "Unhandled", "DefaultFallbackIntent"];
+  const unhandledIntents = [
+    "FallbackIntent",
+    "Unhandled",
+    "DefaultFallbackIntent"
+  ];
   const intentName = _.get(voxaEvent, "intent.name") || voxaEvent.request.type;
   const params = _.get(voxaEvent, "intent.params");
 
@@ -105,16 +119,18 @@ function createUserMessage(messageSet: any, voxaEvent: VoxaEvent) {
   }
 }
 
-function createBotMessage(messageSet: any, voxaEvent: VoxaEvent, reply: IVoxaReply) {
+function createBotMessage(
+  messageSet: any,
+  voxaEvent: VoxaEvent,
+  reply: IVoxaReply
+) {
   let appMessage = _.get(reply, "response.outputSpeech.ssml", "");
   appMessage = appMessage || _.get(reply, "response.outputSpeech.text", "");
   appMessage = appMessage.replace("<speak>", "").replace("</speak>", "");
 
   const newMessage = createMessage(messageSet, voxaEvent);
 
-  newMessage
-    .setAsTypeAgent()
-    .setMessage(appMessage);
+  newMessage.setAsTypeAgent().setMessage(appMessage);
 }
 
 function createMessage(messageSet: any, voxaEvent: VoxaEvent) {

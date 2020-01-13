@@ -1,31 +1,7 @@
 {
-  "defaultSeverity": "error",
-  "extends": [
-    "tslint:recommended",
-    "tslint-no-unused-expression-chai"
-  ],
-  "jsRules": {
-    "no-console": [
-      true,
-      true,
-      true
-    ]
-  },
+  "extends": ["tslint-config-prettier"],
+  "rulesDirectory": ["tslint-plugin-prettier"],
   "rules": {
-    "no-console": [
-      true,
-      true,
-      true
-    ],
-    "max-classes-per-file": [
-      false
-    ],
-    "max-line-length": {
-      "options": [
-        120
-      ],
-      "severity": "warning"
-    }
-  },
-  "rulesDirectory": []
+    "prettier": true
+  }
 }

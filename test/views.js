@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * Views for tests
@@ -12,20 +12,20 @@ const views = (function views() {
     en: {
       translation: {
         LaunchIntent: {
-          OpenResponse: 'Hello! How are you?',
+          OpenResponse: "Hello! How are you?"
         },
         Question: {
-          Ask: { ask: 'What time is it?' },
+          Ask: { ask: "What time is it?" }
         },
         ExitIntent: {
-          GeneralExit: 'Ok. Goodbye.',
+          GeneralExit: "Ok. Goodbye."
         },
         BadInput: {
-          RepeatLastAskReprompt: { say: 'I\'m sorry. I didn\'t understand.' },
-        },
-      },
-    },
+          RepeatLastAskReprompt: { say: "I'm sorry. I didn't understand." }
+        }
+      }
+    }
   };
-}());
+})();
 
 module.exports = views;

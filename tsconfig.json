@@ -1,19 +1,17 @@
 {
   "compilerOptions": {
-    "outDir": "./lib/",
-    "declaration": true,
-    "sourceMap": true,
+    "preserveConstEnums": true,
+    "resolveJsonModule": true,
     "strictNullChecks": true,
-    "module": "commonjs",
-    "target": "ES6",
-    "noImplicitAny": true,
-    "allowJs": false,
+    "sourceMap": true,
+    "allowJs": true,
+    "target": "es5",
+    "outDir": "./lib/",
     "moduleResolution": "node",
-    "strict": true,
-    "lib": ["ES2015"]
+    "lib": ["es2015"],
+    "types": ["node", "mocha"],
+    "esModuleInterop": true,
+    "inlineSources": true
   },
-  "include": [
-    "./src/",
-    "./test/"
-    ]
+  "include": ["./src/"]
 }
